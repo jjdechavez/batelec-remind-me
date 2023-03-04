@@ -1,5 +1,6 @@
 import Hapi from '@hapi/hapi';
 import Joi from 'joi';
+import { spawn } from 'child_process'
 
 const start = async () => {
   const server = new Hapi.Server({
@@ -22,6 +23,30 @@ const start = async () => {
   });
 
   server.route({
+    method: 'GET',
+    path: '/posts',
+    options: {
+      handler: (request, h) => {
+        let posts = []
+        const fbScrape = spawn('python', ['fb-scrape.py'])
+        fbScrape.stdout.on('data', (data) => {
+          console.log(`stdout: ${data}`)
+          // posts.push(post)
+        })
+        fbScrape.stderr.on('data', (data) => {
+          console.log(`stderr: ${data}`)
+        })
+        fbScrape.on('close', (code) => {
+          console.log(`child_process exited with code ${code}`)
+          console.log(posts[0])
+        })
+
+        return h.response({ status: 'OK', message: 'Success get posts' }).code(200);
+      },
+    },
+  });
+
+  server.route({
     method: 'POST',
     path: '/posts',
     options: {
@@ -33,10 +58,11 @@ const start = async () => {
           posts: Joi.string(),
         }),
       },
-      handler: (request, response) => {
+      handler: (request, h) => {
         const { posts } = request.payload;
         console.log(JSON.parse(posts)[0]);
-        return response.response({ status: 'OK' }).code(200);
+
+        return h.response({ status: 'ok' }).code(200);
       },
     },
   });
