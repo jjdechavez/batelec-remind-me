@@ -1,6 +1,6 @@
-from flask import Flask
-from flask import render_template
+from flask import Flask, render_template, jsonify
 from markupsafe import escape
+import json
 
 app = Flask(__name__)
 
@@ -16,16 +16,27 @@ def hello(name=None):
     return render_template('hello.html', name=name)
 
 
+@app.route('/posts')
+def get_posts():
+    file = open('batelec.json')
+    posts = json.load(file)
+    # with fbscrape
+    # for post in get_posts('nintendo', page=1):
+    #     posts.append(post)
+
+    return jsonify(posts)
+
+
+@app.route('/posts/<int:post_id>')
+def show_post(post_id):
+    # show the post with the given id, the id is an integer
+    return f'Post {post_id}'
+
+
 @app.route('/user/<username>')
 def show_user_profile(username):
     # show the user profile for that user
     return f'User {escape(username)}'
-
-
-@app.route('/post/<int:post_id>')
-def show_post(post_id):
-    # show the post with the given id, the id is an integer
-    return f'Post {post_id}'
 
 
 @app.route('/path/<path:subpath>')
