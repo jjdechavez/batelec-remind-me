@@ -15,9 +15,10 @@ Virtual environment to manage dependencies of the project with `. venv/bin/activ
 ## Run development
 
 Run `flask --app main run` command, to start the server
+Debug mode `flask --app main run --debug` command
 
 ## TODOS
 - [X] Setup Flask as server
 - [X] Install facebook_scrapper
-- [] Implement Mongodb as database
+- [X] Implement Mongodb as database
 - [] Store scrape on mongodb
