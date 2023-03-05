@@ -8,6 +8,10 @@ I'll move this project to Flask python to utilize the fb webscrape.
 
 Virtual environment to manage dependencies of the project with `. venv/bin/activate` command
 
+## Install dependencies
+
+`python3 -m pip install -r requirements.txt` command
+
 ## Run development
 
 Run `flask --app main run` command, to start the server

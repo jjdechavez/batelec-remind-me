@@ -1,0 +1,3 @@
+Flask
+pymongo[srv]
+facebook-scraper==0.2.59
