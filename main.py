@@ -1,14 +1,20 @@
 from flask import Flask, render_template, jsonify
 from pymongo import MongoClient
 from markupsafe import escape
+from dotenv import load_dotenv
+import os
 import json
+
+load_dotenv()
+
+MONGO_CLIENT = os.getenv('MONGO_CLIENT')
+MONGO_DB = os.getenv('MONGO_DB')
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-mongo_client = MongoClient(
-    'mongodb://root:password@localhost:27017/?authSource=admin')
-db = mongo_client['batelec-dev']
+mongo_client = MongoClient(MONGO_CLIENT)
+db = mongo_client[MONGO_DB]
 post_collection = db['posts']
 
 

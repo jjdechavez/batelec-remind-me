@@ -4,6 +4,10 @@ Facebook page web scrape daily.
 
 I'll move this project to Flask python to utilize the fb webscrape.
 
+## Create virtual environment for project
+
+`python3 -m venv remind-me-batelec` command
+
 ## Activate venv
 
 Virtual environment to manage dependencies of the project with `. venv/bin/activate` command
@@ -21,7 +25,7 @@ Debug mode `flask --app main run --debug` command
 - [X] Setup Flask as server
 - [X] Install facebook_scrapper
 - [X] Implement Mongodb as database
-- [] Store scrape on mongodb
+- [X] Store scrape on mongodb
 - [] Store Image on Cloud Storage
     - FB images uses token when token expired image is not accessable
     - Can use image_description field (but not every image_description has information about the image)

@@ -1,3 +1,5 @@
 Flask
 pymongo[srv]
 facebook-scraper==0.2.59
+python-dotenv==1.0.0
+cloudinary==1.32.0
