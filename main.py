@@ -2,8 +2,7 @@ from flask import Flask, render_template, jsonify
 from pymongo import MongoClient
 from markupsafe import escape
 import cloudinary
-# from cloudinary.uploader import upload
-# from cloudinary.utils import cloudinary_url
+import cloudinary.uploader
 from dotenv import load_dotenv
 import os
 import json
@@ -53,7 +52,7 @@ def post_existed(post_id):
     return bool(exist_post)
 
 
-def get_post_image(images=None):
+def head_image(images=None):
     if images is None:
         return None
 
@@ -63,6 +62,22 @@ def get_post_image(images=None):
     return images[0]
 
 
+def upload_image(image=None):
+    if image is None:
+        return None
+
+    upload_result = cloudinary.uploader.upload(
+        image,
+        folder='batelec',
+        unique_filename=False,
+        overwrite=True
+    )
+    print('Upload result: ', upload_result)
+    public_id = upload_result['public_id']
+    srcURL = cloudinary.CloudinaryImage(public_id).build_url()
+    return srcURL
+
+
 def upload_image_list(images=None):
     if images is None:
         return []
@@ -70,7 +85,12 @@ def upload_image_list(images=None):
     if len(images) == 0:
         return []
 
-    return images
+    list = []
+    for image in images:
+        upload_result = upload_image(image)
+        list.append(upload_result)
+
+    return list
 
 
 @app.post('/posts')
@@ -91,8 +111,8 @@ def create_posts():
         uploaded_image_lowquality_list = upload_image_list(
             image_lowquality_list)
 
-        image = get_post_image(uploaded_image_list)
-        image_lowquality = get_post_image(uploaded_image_lowquality_list)
+        image = head_image(uploaded_image_list)
+        image_lowquality = head_image(uploaded_image_lowquality_list)
 
         document = {
             "post_id": post_id,
