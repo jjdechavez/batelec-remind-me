@@ -26,6 +26,9 @@ Debug mode `flask --app main run --debug` command
 - [X] Install facebook_scrapper
 - [X] Implement Mongodb as database
 - [X] Store scrape on mongodb
-- [] Store Image on Cloud Storage
+- [X] Store Image on Cloud Storage
     - FB images uses token when token expired image is not accessable
     - Can use image_description field (but not every image_description has information about the image)
+    - Store on specific own folder like "batlec"
+- [] Add CRON jobs to scrape daily (Need to research about it)
+- [] List scrape post collections on specific endpoint
