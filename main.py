@@ -4,6 +4,7 @@ from markupsafe import escape
 import cloudinary
 import cloudinary.uploader
 from flask_apscheduler import APScheduler
+from facebook_scraper import get_posts
 from dotenv import load_dotenv
 import os
 import json
@@ -107,10 +108,10 @@ def upload_image_list(images=None):
 
 @app.post('/posts')
 def create_posts():
-    file = open('batelec.json')
-    posts = json.load(file)
+    # file = open('batelec.json')
+    # posts = json.load(file)
 
-    for post in posts:
+    for post in get_posts('nintendo', pages=10):
         post_id = post['post_id']
 
         if post_existed(post_id) is True:
@@ -171,6 +172,7 @@ def scrape_fb_batelec():
     }).inserted_id
 
     print(job_id)
+    create_posts()
     print("Processing job DONE")
 
     job_collection.update_one({'_id': job_id}, {'$set': {

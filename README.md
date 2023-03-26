@@ -32,3 +32,6 @@ Debug mode `flask --app main run --debug` command
     - Store on specific own folder like "batlec"
 - [] Add CRON jobs to scrape daily (Need to research about it: (Flask-APScheduler)[https://viniciuschiele.github.io/flask-apscheduler])
 - [] List scrape post collections on specific endpoint
+
+## ISSUE
+- facebook_scrapper.get_posts() not working
