@@ -30,5 +30,5 @@ Debug mode `flask --app main run --debug` command
     - FB images uses token when token expired image is not accessable
     - Can use image_description field (but not every image_description has information about the image)
     - Store on specific own folder like "batlec"
-- [] Add CRON jobs to scrape daily (Need to research about it)
+- [] Add CRON jobs to scrape daily (Need to research about it: (Flask-APScheduler)[https://viniciuschiele.github.io/flask-apscheduler])
 - [] List scrape post collections on specific endpoint

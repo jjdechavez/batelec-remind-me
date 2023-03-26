@@ -3,9 +3,11 @@ from pymongo import MongoClient
 from markupsafe import escape
 import cloudinary
 import cloudinary.uploader
+from flask_apscheduler import APScheduler
 from dotenv import load_dotenv
 import os
 import json
+from datetime import datetime
 
 load_dotenv()
 
@@ -15,14 +17,24 @@ MONGO_DB = os.getenv('MONGO_DB')
 CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
 
 
+class SchedulerConfig:
+    SCHEDULER_API_ENABLED = True
+
+
 app = Flask(__name__)
 app.config['DEBUG'] = True
+app.config.from_object(SchedulerConfig())
 
 mongo_client = MongoClient(MONGO_CLIENT)
 db = mongo_client[MONGO_DB]
 post_collection = db['posts']
+job_collection = db['jobs']
 
 cloudinary_config = cloudinary.config(secure=True)
+scheduler = APScheduler()
+
+scheduler.init_app(app)
+scheduler.start()
 
 
 @app.route("/")
@@ -146,6 +158,26 @@ def show_post(post_id):
 def collections():
     collection_names = db.list_collection_names()
     return jsonify({'collections': collection_names})
+
+
+@scheduler.task('cron', id='scrape_batelec_1_fb', minute='*')
+def scrape_fb_batelec():
+    print('Starting to scrape on batelec 1 facebook...')
+    job_id = job_collection.insert_one({
+        'type': "SCRAPE_FB_BATELEC_1",
+        'starts_at': datetime.today().replace(microsecond=0),
+        'status': 'PROCESSING',
+        'message': 'Currently working on it'
+    }).inserted_id
+
+    print(job_id)
+    print("Processing job DONE")
+
+    job_collection.update_one({'_id': job_id}, {'$set': {
+        'ends_at': datetime.today().replace(microsecond=0),
+        'status': 'DONE',
+        'message': 'Job has been processed'
+    }})
 
 
 @app.route('/user/<username>')
